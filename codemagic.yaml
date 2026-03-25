@@ -1,0 +1,33 @@
+workflows:
+  flutter-android-release:
+    name: Flutter Android Release
+    instance_type: mac_mini_m1
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch:
+        include:
+          - main
+    cache:
+      cache_paths:
+        - ~/.gradle/caches
+        - ~/.gradle/wrapper
+        - ~/.pub-cache
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Build APK
+        script: flutter build apk --release
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
+    publishing:
+      email:
+        recipients:
+          - mazenmaklad9@gmail.com
+        notify:
+          success: true
+          failure: true
