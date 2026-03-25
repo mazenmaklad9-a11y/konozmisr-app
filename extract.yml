@@ -1,0 +1,33 @@
+name: Extract ZIP Files
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Extract lib.zip
+        run: |
+          if [ -f lib.zip ]; then
+            unzip -o lib.zip
+            rm lib.zip
+          fi
+      
+      - name: Extract assets.zip
+        run: |
+          if [ -f assets.zip ]; then
+            unzip -o assets.zip
+            rm assets.zip
+          fi
+      
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "Extract Flutter source files" || true
+          git push
